@@ -12,8 +12,10 @@
         </div>
     @endif
     <h1>Halo, {{ $nama }} ({{ $role }})</h1>
-    <p>Selamat datang di halaman dashboard admin.</p>
-
+    <p><strong>Selamat datang di halaman dashboard admin.</strong></p>
+    <img src="{{ asset('images/gif1.gif') }}" alt="Welcome GIF" style="width: 300px; margin-top: 10px;">
+    <br><br>
+    
     <a href="{{ route('admin.create.user.form') }}">
         <button type="button">Buat User Baru</button>
     </a>
