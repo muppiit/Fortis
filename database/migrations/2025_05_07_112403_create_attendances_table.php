@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nip'); // foreign key
             $table->enum('type', ['clock-in', 'clock-out']);
-            $table->enum('method', ['jam', 'qr']);
             $table->dateTime('waktu');
             $table->decimal('latitude', 10, 6)->nullable();
             $table->decimal('longitude', 10, 6)->nullable();

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\SuperAdminDashboardController;
 
 /*
@@ -37,6 +39,15 @@ Route::get('/admin/create-user', [AdminDashboardController::class, 'showCreateUs
 Route::post('/admin/create-user', [AdminDashboardController::class, 'createUser'])
     ->name('admin.create.user')
     ->middleware('admin.session');
+
+
+// ATTENDANCE
+Route::get('/admin/attendances', [AttendanceController::class, 'index'])->name('admin.attendances');
+
+// LEAVE
+Route::get('/admin/leaves', [LeaveController::class, 'index'])->name('admin.leaves.index');
+Route::get('/admin/leaves/{id}', [LeaveController::class, 'show'])->name('admin.leaves.show');
+Route::post('/admin/leaves/{id}/status', [LeaveController::class, 'updateStatus'])->name('admin.leaves.updateStatus');
 
 
 

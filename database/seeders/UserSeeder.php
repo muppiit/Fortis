@@ -36,6 +36,28 @@ class UserSeeder extends Seeder
                 'manager_departement' => 'Sari IT',
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],
+            [
+                'nip' => '0001',
+                'nama' => 'Abdul Balmod',
+                'password' => Hash::make('user123'),
+                'role' => 'user',
+                'departement' => 'IT',
+                'team_departement' => 'IT Core',
+                'manager_departement' => 'Sari IT',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nip' => '0002',
+                'nama' => 'Siti Nurhaliza',
+                'password' => Hash::make('user123'),
+                'role' => 'user',
+                'departement' => 'IT',
+                'team_departement' => 'IT Core',
+                'manager_departement' => 'Sari IT',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
     }

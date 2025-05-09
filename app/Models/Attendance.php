@@ -13,7 +13,6 @@ class Attendance extends Model
     protected $fillable = [
         'nip',
         'type',
-        'method',
         'waktu',
         'latitude',
         'longitude',

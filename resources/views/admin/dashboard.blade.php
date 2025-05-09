@@ -15,10 +15,19 @@
     <p><strong>Selamat datang di halaman dashboard admin.</strong></p>
     <img src="{{ asset('images/gif1.gif') }}" alt="Welcome GIF" style="width: 300px; margin-top: 10px;">
     <br><br>
-    
+
     <a href="{{ route('admin.create.user.form') }}">
         <button type="button">Buat User Baru</button>
     </a>
+    <br>
+    <a href="{{ route('admin.attendances') }}">
+        <button type="button">Lihat Data Attendance</button>
+    </a>
+    <br>
+    <a href="{{ route('admin.leaves.index') }}">
+        <button type="button">Lihat Data Cuti</button>
+    </a>
+    
 
     <h2>Daftar User dan Admin</h2>
     <table border="1" cellpadding="5" cellspacing="0">
