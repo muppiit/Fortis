@@ -24,7 +24,7 @@ class LeaveSeeder extends Seeder
                 'tanggal_mulai' => Carbon::now()->subDays(rand(1, 10)),
                 'tanggal_selesai' => Carbon::now()->addDays(rand(1, 5)),
                 'alasan' => 'Cuti karena keperluan pribadi atau sakit.',
-                'approved_manager' => [null, 'approved', 'rejected'][rand(0, 2)],
+                'approved_manager' => ['pending', 'approved', 'rejected'][rand(0, 2)],
             ]);
         }
     }
