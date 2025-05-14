@@ -21,18 +21,10 @@ class AttendanceSeeder extends Seeder
             // Buat 2 data dummy untuk setiap user
             Attendance::create([
                 'nip' => $nip,
-                'type' => 'clock-in',
+                'type' => 'clock-out',
                 'waktu' => Carbon::now()->subHours(2),
                 'latitude' => '-7.983908',
                 'longitude' => '112.621391',
-            ]);
-
-            Attendance::create([
-                'nip' => $nip,
-                'type' => 'clock-out',
-                'waktu' => Carbon::now(),
-                'latitude' => '-7.983910',
-                'longitude' => '112.621400',
             ]);
         }
     }
