@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Attendance extends Model
 {
     use HasFactory;
+
     protected $table = 'attendances';
 
     protected $fillable = [
@@ -16,6 +17,12 @@ class Attendance extends Model
         'waktu',
         'latitude',
         'longitude',
+    ];
+
+    protected $casts = [
+        'waktu'     => 'datetime',
+        'latitude'  => 'float',
+        'longitude' => 'float',
     ];
 
     // Relasi ke User
