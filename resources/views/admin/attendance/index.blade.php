@@ -4,735 +4,530 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Attendance</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --success: #4cc9f0;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --danger: #e63946;
-            --warning: #ffb703;
-            --info: #8ecae6;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --background: #f9fafb;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --text: #1f2937;
+            --text-secondary: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #f5f7fb;
-            color: #333;
-            padding: 30px;
+            background-color: var(--background);
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        .page-title {
-            font-size: 28px;
-            color: #333;
-            display: flex;
-            align-items: center;
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
         }
 
-        .page-title i {
-            margin-right: 15px;
-            font-size: 32px;
-            color: var(--primary);
-            background-color: rgba(67, 97, 238, 0.1);
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .back-button {
-            background-color: white;
-            border: none;
-            color: #555;
-            padding: 12px 20px;
+        .card {
+            background-color: var(--card);
             border-radius: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .back-button:hover {
-            background-color: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
-        }
-
-        .back-button i {
-            margin-right: 8px;
-        }
-
-        .attendance-card {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-bottom: 24px;
         }
 
         .card-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 20px;
-            color: white;
-        }
-
-        .card-header h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .card-header p {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        .card-body {
-            padding: 25px;
-        }
-
-        /* Tools Section */
-        .attendance-tools {
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
             justify-content: space-between;
-        }
-
-        .search-box {
-            display: flex;
             align-items: center;
-            background-color: #f5f7fb;
-            border-radius: 8px;
-            padding: 0 15px;
-            flex: 1;
-            max-width: 400px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
-        .search-box input {
-            border: none;
-            background: transparent;
-            padding: 12px 10px;
-            font-size: 14px;
+        .search-container {
+            position: relative;
             width: 100%;
+            max-width: 300px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 8px 8px 36px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        .search-box i {
-            color: #777;
+        .search-input:focus {
+            border-color: var(--primary);
         }
 
-        .filter-group {
+        .filter-container {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .filter-select {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 12px 15px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
             font-size: 14px;
-            color: #555;
+            outline: none;
             background-color: white;
             cursor: pointer;
-            outline: none;
-            min-width: 150px;
-            transition: all 0.3s ease;
         }
 
-        .filter-select:focus, .filter-select:hover {
+        .filter-select:focus {
             border-color: var(--primary);
-            box-shadow: 0 2px 5px rgba(67, 97, 238, 0.1);
         }
 
-        .export-btn {
-            background-color: #f1f3f9;
-            color: #555;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .export-btn:hover {
-            background-color: #e2e6f1;
-        }
-
-        /* Table Styles */
-        .attendance-table-wrapper {
+        .table-container {
             overflow-x: auto;
-            border-radius: 8px;
         }
 
-        .attendance-table {
+        table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        .attendance-table th, .attendance-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .attendance-table th {
-            background-color: #f8f9fa;
-            color: #555;
-            font-weight: 600;
+            border-collapse: collapse;
             font-size: 14px;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
             white-space: nowrap;
-            position: sticky;
-            top: 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
 
-        .attendance-table th:first-child {
-            border-top-left-radius: 8px;
+        th:hover {
+            background-color: #e5e7eb;
         }
 
-        .attendance-table th:last-child {
-            border-top-right-radius: 8px;
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .attendance-table tbody tr {
-            transition: all 0.3s ease;
-        }
-
-        .attendance-table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .attendance-table tbody tr:last-child td {
+        tr:last-child td {
             border-bottom: none;
         }
 
-        .attendance-table tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 8px;
+        tr:hover {
+            background-color: #f9fafb;
         }
 
-        .attendance-table tbody tr:last-child td:last-child {
-            border-bottom-right-radius: 8px;
-        }
-
-        .attendance-table tbody td {
-            font-size: 14px;
-        }
-
-        /* User Name Column */
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #e2e6f1;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            margin-right: 10px;
-            font-weight: 600;
-        }
-
-        /* Time Column */
-        .time-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .time-value {
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
             font-weight: 500;
         }
 
-        .time-date {
-            font-size: 12px;
-            color: #777;
-            margin-top: 3px;
+        .badge-in {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
         }
 
-        /* Pagination */
-        .pagination-container {
-            display: flex;
-            justify-content: space-between;
+        .badge-out {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .badge-break {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .button {
+            display: inline-flex;
             align-items: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
         }
 
-        .page-info {
-            font-size: 14px;
-            color: #666;
+        .button-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .button-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .button-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .button-outline:hover {
+            background-color: #f3f4f6;
         }
 
         .pagination {
             display: flex;
-            list-style: none;
-            gap: 5px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
         }
 
-        .pagination li a {
+        .pagination-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .pagination-controls {
             display: flex;
-            width: 35px;
-            height: 35px;
+            gap: 8px;
+        }
+
+        .pagination-button {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #555;
-            font-size: 14px;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
             background-color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .pagination li a:hover, .pagination li a.active {
+        .pagination-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .pagination-button.active {
             background-color: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
 
-        /* Summary Cards */
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        .pagination-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .summary-card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .summary-card-title {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .summary-card-value {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .summary-card-sub {
-            font-size: 12px;
-            color: #888;
-            display: flex;
-            align-items: center;
-        }
-
-        .summary-card-sub i {
-            margin-right: 5px;
-        }
-
-        .summary-card-sub.up {
-            color: #2ecc71;
-        }
-
-        .summary-card-sub.down {
-            color: #e74c3c;
-        }
-
-        /* Empty State */
         .empty-state {
-            padding: 40px;
+            padding: 48px 0;
             text-align: center;
-            display: none;
+            color: var(--text-secondary);
         }
 
         .empty-state-icon {
-            font-size: 50px;
-            color: #ddd;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
         }
 
-        .empty-state-text {
-            font-size: 16px;
-            color: #888;
-            margin-bottom: 20px;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .loading .spinner {
-            border: 3px solid rgba(0, 0, 0, 0.1);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Mobile Responsive */
         @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            
             .header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
             }
-            
-            .back-button {
-                align-self: flex-start;
-            }
-            
-            .attendance-tools {
+
+            .card-header {
                 flex-direction: column;
+                align-items: flex-start;
             }
-            
-            .search-box {
+
+            .search-container {
                 max-width: 100%;
             }
-            
-            .filter-group {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 10px;
-            }
-            
-            .summary-cards {
-                grid-template-columns: 1fr;
+
+            th, td {
+                padding: 10px 12px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1 class="page-title">
-            <i class="fas fa-calendar-check"></i>
-            Daftar Kehadiran User
-        </h1>
-        
-        <a href="{{ route('admin.dashboard') }}">
-            <button class="back-button">
-                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
-            </button>
-        </a>
-    </div>
-    
-    <!-- Summary Cards -->
-    <div class="summary-cards">
-        <div class="summary-card">
-            <div class="summary-card-title">Total Kehadiran</div>
-            <div class="summary-card-value" id="totalAttendance">{{ count($attendances) }}</div>
-        </div>
-        
-        <div class="summary-card">
-            <div class="summary-card-title">Check In Hari Ini</div>
-            <div class="summary-card-value" id="todayCheckIn"></div>
-        </div>
-        
-        <div class="summary-card">
-            <div class="summary-card-title">Check Out Hari Ini</div>
-            <div class="summary-card-value" id="todayCheckOut"></div>
-        </div>
-        
-        <div class="summary-card">
-            <div class="summary-card-title">Departemen Aktif</div>  
-            <div class="summary-card-value" id="activeDepartments"></div>
-        </div>
-    </div>
-    
-    <div class="attendance-card">
-        <div class="card-header">
-            <h2>Data Kehadiran</h2>
-            <p>Daftar lengkap aktivitas kehadiran karyawan</p>
-        </div>
-        
-        <div class="card-body">
-            <!-- Tools Section -->
-            <div class="attendance-tools">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Cari berdasarkan nama, NIP, departemen...">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <div class="search-container">
+                    <div class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <input type="text" class="search-input" placeholder="Cari berdasarkan nama atau NIP..." id="searchInput" oninput="filterTable()">
                 </div>
-                
-                <div class="filter-group">
-                    <select class="filter-select" id="filterDepartment">
+                <div class="filter-container">
+                    <select class="filter-select" id="departmentFilter" onchange="filterTable()">
                         <option value="">Semua Departemen</option>
-                        <!-- Will be populated by JS -->
+                        <!-- Departemen akan diisi secara dinamis dengan JavaScript -->
+                    </select>
+                    <select class="filter-select" id="typeFilter" onchange="filterTable()">
+                        <option value="">Semua Tipe</option>
+                        <option value="in">Check In</option>
+                        <option value="out">Check Out</option>
                     </select>
                 </div>
             </div>
-            
-            <!-- Table Section -->
-            <div class="attendance-table-wrapper">
-                <table class="attendance-table" id="attendanceTable">
+
+            <div class="table-container">
+                <table>
                     <thead>
                         <tr>
-                            <th>NIP</th>
-                            <th>Nama</th>
-                            <th>Departemen</th>
-                            <th>Team</th>
-                            <th>Manager</th>
-                            <th>Tipe</th>
-                            <th>Waktu</th>
+                            <th onclick="sortTable(0)">NIP</th>
+                            <th onclick="sortTable(1)">Nama</th>
+                            <th onclick="sortTable(2)">Departement</th>
+                            <th onclick="sortTable(3)">Team Departement</th>
+                            <th onclick="sortTable(4)">Manager Departement</th>
+                            <th onclick="sortTable(5)">Tipe</th>
+                            <th onclick="sortTable(6)">Waktu</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($attendances as $a)
-                            <tr data-department="{{ $a->user->departement ?? '' }}" data-type="{{ $a->type }}">
+                            <tr>
                                 <td>{{ $a->nip }}</td>
-                                <td>
-                                    <div class="user-info">
-                                        <div class="user-avatar">
-                                            {{ $a->user ? substr($a->user->nama, 0, 1) : '-' }}
-                                        </div>
-                                        {{ $a->user->nama ?? '-' }}
-                                    </div>
-                                </td>
+                                <td>{{ $a->user->nama ?? '-' }}</td>
                                 <td>{{ $a->user->departement ?? '-' }}</td>
                                 <td>{{ $a->user->team_departement ?? '-' }}</td>
                                 <td>{{ $a->user->manager_departement ?? '-' }}</td>
-                                <td>{{ $a->type ?? '-' }}</td>
                                 <td>
-                                    <div class="time-info">
-                                        <span class="time-value">
-                                            {{ \Carbon\Carbon::parse($a->waktu)->format('H:i') }}
-                                        </span>
-                                        <span class="time-date">
-                                            {{ \Carbon\Carbon::parse($a->waktu)->format('d M Y') }}
-                                        </span>
-                                    </div>
+                                    @if($a->type == 'in')
+                                        <span class="badge badge-in">Check In</span>
+                                    @elseif($a->type == 'out')
+                                        <span class="badge badge-out">Check Out</span>
+                                    @else
+                                        <span class="badge badge-break">{{ $a->type }}</span>
+                                    @endif
                                 </td>
+                                <td>{{ $a->waktu }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                
-                <!-- Empty State - Will be shown when no results found -->
-                <div class="empty-state" id="emptyState">
-                    <div class="empty-state-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="empty-state-text">Tidak ada data kehadiran yang sesuai dengan filter</div>
-                </div>
-                
-                <!-- Loading Animation -->
-                <div class="loading" id="loadingState">
-                    <div class="spinner"></div>
-                    <p>Memuat data...</p>
-                </div>
             </div>
-            
-            <!-- Pagination -->
-            <div class="pagination-container">
-                <div class="page-info">Menampilkan <span id="currentShowing">{{ count($attendances) }}</span> dari <span id="totalItems">{{ count($attendances) }}</span> data</div>
-                
-                <ul class="pagination">
-                    <li><a href="#" id="prevPage"><i class="fas fa-chevron-left"></i></a></li>
-                    <li><a href="#" class="active">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#" id="nextPage"><i class="fas fa-chevron-right"></i></a></li>
-                </ul>
+
+            <div class="pagination">
+                <div class="pagination-info">
+                    Menampilkan <span id="startRecord">1</span> sampai <span id="endRecord">10</span> dari <span id="totalRecords">0</span> data
+                </div>
+                <div class="pagination-controls">
+                    <button class="pagination-button" id="prevPage" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="pagination-button active">1</button>
+                    <button class="pagination-button">2</button>
+                    <button class="pagination-button">3</button>
+                    <button class="pagination-button" id="nextPage">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
+
+        <a href="{{ route('admin.dashboard') }}">
+            <button type="button" class="button button-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Kembali ke Dashboard
+            </button>
+        </a>
     </div>
-    
+
     <script>
+        // Populate department filter dynamically
         document.addEventListener('DOMContentLoaded', function() {
-            // Search Functionality
-            const searchInput = document.getElementById('searchInput');
-            const table = document.getElementById('attendanceTable');
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-            const emptyState = document.getElementById('emptyState');
-            const loadingState = document.getElementById('loadingState');
-            const currentShowing = document.getElementById('currentShowing');
-            
-            // Populate departments filter dynamically
-            const filterDepartment = document.getElementById('filterDepartment');
+            const departmentFilter = document.getElementById('departmentFilter');
             const departments = new Set();
             
-            for (let i = 0; i < rows.length; i++) {
-                const dept = rows[i].getAttribute('data-department');
-                if (dept && dept !== '-') {
-                    departments.add(dept);
+            // Get all department values from the table
+            const departmentCells = document.querySelectorAll('tbody tr td:nth-child(3)');
+            departmentCells.forEach(cell => {
+                if (cell.textContent.trim() !== '-') {
+                    departments.add(cell.textContent.trim());
                 }
-            }
-            
-            departments.forEach(dept => {
-                const option = document.createElement('option');
-                option.value = dept;
-                option.textContent = dept;
-                filterDepartment.appendChild(option);
             });
             
-            // Update summary cards
-            const totalAttendance = document.getElementById('totalAttendance');
-            const todayCheckIn = document.getElementById('todayCheckIn');
-            const todayCheckOut = document.getElementById('todayCheckOut');
-            const activeDepartments = document.getElementById('activeDepartments');
+            // Add options to the select element
+            departments.forEach(department => {
+                const option = document.createElement('option');
+                option.value = department;
+                option.textContent = department;
+                departmentFilter.appendChild(option);
+            });
             
-            // Set active departments
-            activeDepartments.textContent = departments.size;
+            // Update total records count
+            updatePaginationInfo();
+        });
+        
+        // Filter table based on search input and filters
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const departmentFilter = document.getElementById('departmentFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const rows = document.querySelectorAll('tbody tr');
             
-            // Count today's check-ins and check-outs
-            let checkIns = 0;
-            let checkOuts = 0;
+            let visibleCount = 0;
             
-            const today = new Date().toISOString().split('T')[0];
-            
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                const timeCell = cells[6].querySelector('.time-date');
-                const timeText = timeCell.textContent.trim();
+            rows.forEach(row => {
+                const nip = row.cells[0].textContent.toLowerCase();
+                const name = row.cells[1].textContent.toLowerCase();
+                const department = row.cells[2].textContent.trim();
+                const typeCell = row.cells[5].querySelector('.badge');
+                const type = typeCell ? typeCell.textContent.toLowerCase() : '';
                 
-                // Convert date format to check if it's today
-                const dateParts = timeText.split(' ');
-                const month = getMonthNumber(dateParts[1]);
-                const formattedDate = `${dateParts[2]}-${month}-${dateParts[0].padStart(2, '0')}`;
+                const matchesSearch = nip.includes(searchInput) || name.includes(searchInput);
+                const matchesDepartment = departmentFilter === '' || department === departmentFilter;
+                const matchesType = typeFilter === '' || type.toLowerCase().includes(typeFilter.toLowerCase());
                 
-                const type = rows[i].getAttribute('data-type');
-                
-                if (formattedDate === today) {
-                    if (type === 'in') {
-                        checkIns++;
-                    } else if (type === 'out') {
-                        checkOuts++;
-                    }
+                if (matchesSearch && matchesDepartment && matchesType) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Show empty state if no results
+            if (visibleCount === 0) {
+                const tbody = document.querySelector('tbody');
+                if (!document.getElementById('emptyState')) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.id = 'emptyState';
+                    emptyRow.innerHTML = `
+                        <td colspan="7" class="empty-state">
+                            <div class="empty-state-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <h3>Tidak ada data yang ditemukan</h3>
+                            <p>Coba ubah filter atau kata kunci pencarian</p>
+                        </td>
+                    `;
+                    tbody.appendChild(emptyRow);
+                }
+            } else {
+                const emptyState = document.getElementById('emptyState');
+                if (emptyState) {
+                    emptyState.remove();
                 }
             }
             
-            todayCheckIn.textContent = checkIns;
-            todayCheckOut.textContent = checkOuts;
+            updatePaginationInfo();
+        }
+        
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const table = document.querySelector('table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
             
-            // Helper function to convert month name to number
-            function getMonthNumber(monthName) {
-                const months = {
-                    'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
-                    'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
-                    'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
-                };
-                return months[monthName] || '01';
-            }
+            // Get current sort direction
+            const th = table.querySelectorAll('th')[columnIndex];
+            const currentDirection = th.getAttribute('data-sort') === 'asc' ? 'desc' : 'asc';
             
-            // Combined filter and search function
-            function filterTable() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const departmentFilter = filterDepartment.value.toLowerCase();
+            // Reset all headers
+            table.querySelectorAll('th').forEach(header => {
+                header.removeAttribute('data-sort');
+            });
+            
+            // Set new sort direction
+            th.setAttribute('data-sort', currentDirection);
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                let aValue = a.cells[columnIndex].textContent.trim();
+                let bValue = b.cells[columnIndex].textContent.trim();
                 
-                // Show loading state briefly
-                loadingState.style.display = 'block';
+                // Handle date sorting for the time column
+                if (columnIndex === 6) {
+                    aValue = new Date(aValue);
+                    bValue = new Date(bValue);
+                }
                 
-                setTimeout(() => {
-                    let visibleCount = 0;
-                    
-                    for (let i = 0; i < rows.length; i++) {
-                        const cells = rows[i].getElementsByTagName('td');
-                        const rowDepartment = rows[i].getAttribute('data-department').toLowerCase();
-                        
-                        // Department filtering
-                        const departmentMatch = departmentFilter === '' || rowDepartment.includes(departmentFilter);
-                        
-                        // Text search across all columns
-                        let textMatch = false;
-                        for (let j = 0; j < cells.length; j++) {
-                            const cellText = cells[j].textContent.toLowerCase();
-                            if (cellText.indexOf(searchTerm) > -1) {
-                                textMatch = true;
-                                break;
-                            }
-                        }
-                        
-                        if (textMatch && departmentMatch) {
-                            rows[i].style.display = '';
-                            visibleCount++;
-                        } else {
-                            rows[i].style.display = 'none';
-                        }
-                    }
-                    
-                    // Update counter and show empty state if needed
-                    currentShowing.textContent = visibleCount;
-                    
-                    if (visibleCount === 0) {
-                        emptyState.style.display = 'block';
-                    } else {
-                        emptyState.style.display = 'none';
-                    }
-                    
-                    loadingState.style.display = 'none';
-                }, 300); // Brief delay to show loading animation
-            }
+                // Compare values
+                if (aValue < bValue) {
+                    return currentDirection === 'asc' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return currentDirection === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
             
-            // Event listeners for all filters
-            searchInput.addEventListener('keyup', filterTable);
-            filterDepartment.addEventListener('change', filterTable);
+            // Reorder rows in the table
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Update pagination information
+        function updatePaginationInfo() {
+            const visibleRows = document.querySelectorAll('tbody tr:not([style*="display: none"])').length;
+            document.getElementById('totalRecords').textContent = visibleRows;
             
-            // Pagination
-            const prevPage = document.getElementById('prevPage');
-            const nextPage = document.getElementById('nextPage');
+            // For simplicity, we're just updating the total count
+            // In a real implementation, you would calculate start and end based on current page
+            const startRecord = visibleRows > 0 ? 1 : 0;
+            const endRecord = Math.min(10, visibleRows);
             
-            // Apply a subtle animation to rows when they appear
-            for (let i = 0; i < rows.length; i++) {
-                rows[i].style.opacity = '0';
-                rows[i].style.transform = 'translateY(10px)';
-                rows[i].style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                
-                setTimeout(() => {
-                    rows[i].style.opacity = '1';
-                    rows[i].style.transform = 'translateY(0)';
-                }, 50 * i);
-            }
-        });
+            document.getElementById('startRecord').textContent = startRecord;
+            document.getElementById('endRecord').textContent = endRecord;
+        }
     </script>
 </body>
 </html>
