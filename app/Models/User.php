@@ -5,24 +5,23 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
-    protected $table = 'users';
     protected $primaryKey = 'nip';
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
         'nip',
-        'nama',
+        'name',
+        'email',
         'password',
-        'departement',
-        'team_departement',
-        'manager_departement',
-        'role',
+        'role_id',
+        'team_department_id',
     ];
 
     protected $hidden = [
@@ -30,19 +29,26 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-    // Relasi ke tabel attendance
-    public function attendances()
+    public function getAuthIdentifierName()
     {
-        return $this->hasMany(Attendance::class, 'nip', 'nip');
+        return 'nip';
     }
 
-    // Relasi ke tabel leaves
-    public function leaves()
+    public function role()
     {
-        return $this->hasMany(Leave::class, 'nip', 'nip');
+        return $this->belongsTo(Role::class);
     }
 
-    // JWT Auth implementation
+    public function teamDepartment()
+    {
+        return $this->belongsTo(TeamDepartment::class);
+    }
+
+    public function department()
+    {
+        return $this->teamDepartment?->department();
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

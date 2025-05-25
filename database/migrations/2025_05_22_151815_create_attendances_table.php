@@ -13,14 +13,18 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->string('nip'); // foreign key
+            $table->string('user_nip');
             $table->enum('type', ['clock-in', 'clock-out']);
             $table->dateTime('waktu');
-            $table->decimal('latitude', 10, 6)->nullable();
-            $table->decimal('longitude', 10, 6)->nullable();
-            $table->timestamps();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
 
-            $table->foreign('nip')->references('nip')->on('users')->onDelete('cascade');
+            // Durasi dihitung berdasarkan selisih dari expected time
+            $table->decimal('late_duration', 5, 2)->nullable();     
+            $table->decimal('overtime_duration', 5, 2)->nullable(); 
+
+            $table->foreign('user_nip')->references('nip')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

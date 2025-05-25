@@ -9,29 +9,27 @@ class Leave extends Model
 {
     use HasFactory;
 
-    protected $table = 'leaves';
-
     protected $fillable = [
-        'nip',
-        'type',
-        'tanggal_mulai',
-        'tanggal_selesai',
-        'alasan',
-        'approved_manager',
+        'user_nip',
+        'type',//'sick', 'paid'
+        'start_date',
+        'end_date',
+        'reason',
+        'proof_file',//gambar
+        'status',// 'pending', 'approved', 'rejected'
+        'approved_by',
+        'approved_at',
     ];
 
-    protected $casts = [
-        'tanggal_mulai' => 'date',
-        'tanggal_selesai' => 'date',
-    ];
-
-    protected $attributes = [
-        'approved_manager' => 'pending',
-    ];
-
-    // Relasi ke User
+    // Relasi user yang mengajukan cuti
     public function user()
     {
-        return $this->belongsTo(User::class, 'nip', 'nip');
+        return $this->belongsTo(User::class, 'user_nip', 'nip');
+    }
+
+    // Relasi user yang menyetujui cuti
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by', 'nip');
     }
 }

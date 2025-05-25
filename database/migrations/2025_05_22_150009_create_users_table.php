@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->string('nip')->primary(); // Ganti ID dengan NIP
-            $table->string('nama');
+            $table->string('nip')->primary();
+            $table->string('name');
             $table->string('password');
-            $table->string('departement')->nullable();
-            $table->string('team_departement')->nullable();
-            $table->string('manager_departement')->nullable();
-            $table->enum('role', ['user', 'admin', 'super-admin'])->default('user');
-            $table->rememberToken();
+            $table->string('email')->unique();
+            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('team_department_id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('team_department_id')->references('id')->on('team_departments')->onDelete('cascade');
             $table->timestamps();
         });
     }

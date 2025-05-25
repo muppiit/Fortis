@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,23 +18,23 @@
             --pending-color: #f39c12;
             --rejected-color: #e74c3c;
         }
-        
+
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .card {
             border-radius: 15px;
             border: none;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
         }
-        
+
         .card-header {
             background-color: var(--primary-color);
             color: white;
@@ -51,46 +51,46 @@
             font-weight: bold;
             font-size: 14px;
         }
-        
+
         .status-approved {
             background-color: var(--approved-color);
             color: white;
         }
-        
+
         .status-pending {
             background-color: var(--pending-color);
             color: white;
         }
-        
+
         .status-rejected {
             background-color: var(--rejected-color);
             color: white;
         }
-        
+
         .info-group {
             margin-bottom: 15px;
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
             padding-left: 15px;
         }
-        
+
         .info-group:hover {
             border-left-color: var(--secondary-color);
             background-color: rgba(52, 152, 219, 0.05);
         }
-        
+
         .info-label {
             color: #6c757d;
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 5px;
         }
-        
+
         .info-value {
             font-size: 16px;
             font-weight: 500;
         }
-        
+
         .btn-action {
             border-radius: 30px;
             padding: 8px 25px;
@@ -99,33 +99,33 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin-right: 10px;
         }
-        
+
         .btn-approve {
             background-color: var(--approved-color);
             border-color: var(--approved-color);
             color: white;
         }
-        
+
         .btn-approve:hover {
             background-color: #219a52;
             border-color: #219a52;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-reject {
             background-color: var(--rejected-color);
             border-color: var(--rejected-color);
             color: white;
         }
-        
+
         .btn-reject:hover {
             background-color: #d63031;
             border-color: #d63031;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-back {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -134,14 +134,14 @@
             border-radius: 30px;
             transition: all 0.3s ease;
         }
-        
+
         .btn-back:hover {
             background-color: #1e2b38;
             border-color: #1e2b38;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .leave-date {
             background-color: #f8f9fa;
             border-left: 4px solid var(--secondary-color);
@@ -149,13 +149,13 @@
             margin-bottom: 20px;
             border-radius: 5px;
         }
-        
+
         .leave-date-icon {
             color: var(--secondary-color);
             font-size: 24px;
             margin-right: 10px;
         }
-        
+
         .leave-reason {
             background-color: #f8f9fa;
             border-left: 4px solid var(--accent-color);
@@ -163,19 +163,19 @@
             margin-bottom: 20px;
             border-radius: 5px;
         }
-        
+
         .divider {
             height: 1px;
             background-color: #e9ecef;
             margin: 25px 0;
         }
-        
+
         .employee-info {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .employee-avatar {
             width: 60px;
             height: 60px;
@@ -188,22 +188,22 @@
             font-size: 24px;
             margin-right: 15px;
         }
-        
+
         .employee-details {
             flex-grow: 1;
         }
-        
+
         .employee-name {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 0;
         }
-        
+
         .employee-id {
             color: #6c757d;
             font-size: 14px;
         }
-        
+
         .badge-type {
             background-color: var(--secondary-color);
             color: white;
@@ -215,6 +215,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container py-5">
         <div class="row justify-content-center">
@@ -222,22 +223,30 @@
                 <div class="card">
                     <div class="card-header position-relative">
                         <h2 class="mb-0"><i class="fas fa-calendar-alt me-2"></i> Detail Cuti</h2>
-                        <div class="leave-status 
-                            {{ $leave->approved_manager === 'approved' ? 'status-approved' : 
-                              ($leave->approved_manager === 'pending' ? 'status-pending' : 'status-rejected') }}">
-                            <i class="fas {{ $leave->approved_manager === 'approved' ? 'fa-check-circle' : 
-                                   ($leave->approved_manager === 'pending' ? 'fa-clock' : 'fa-times-circle') }}"></i>
-                            {{ ucfirst($leave->approved_manager) }}
+                        <div
+                            class="leave-status 
+                        {{ $leave->status === 'approved'
+                            ? 'status-approved'
+                            : ($leave->status === 'pending'
+                                ? 'status-pending'
+                                : 'status-rejected') }}">
+                            <i
+                                class="fas {{ $leave->status === 'approved'
+                                    ? 'fa-check-circle'
+                                    : ($leave->status === 'pending'
+                                        ? 'fa-clock'
+                                        : 'fa-times-circle') }}"></i>
+                            {{ ucfirst($leave->status) }}
                         </div>
                     </div>
                     <div class="card-body p-4">
                         <div class="employee-info">
                             <div class="employee-avatar">
-                                {{ strtoupper(substr($leave->user->nama ?? 'User', 0, 1)) }}
+                                {{ strtoupper(substr($leave->user->name ?? 'User', 0, 1)) }}
                             </div>
                             <div class="employee-details">
-                                <h4 class="employee-name">{{ $leave->user->nama ?? '-' }}</h4>
-                                <div class="employee-id">{{ $leave->nip }}</div>
+                                <h4 class="employee-name">{{ $leave->user->name ?? '-' }}</h4>
+                                <div class="employee-id">{{ $leave->user->nip }}</div>
                                 <div class="badge-type mt-2">{{ ucfirst($leave->type) }}</div>
                             </div>
                         </div>
@@ -246,20 +255,23 @@
                             <div class="col-md-6">
                                 <div class="info-group">
                                     <div class="info-label"><i class="fas fa-building me-1"></i> Departemen</div>
-                                    <div class="info-value">{{ $leave->user->departement ?? '-' }}</div>
+                                    <div class="info-value">
+                                        {{ $leave->user->teamDepartment->department->department ?? '-' }}</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="info-group">
                                     <div class="info-label"><i class="fas fa-users me-1"></i> Tim</div>
-                                    <div class="info-value">{{ $leave->user->team_departement ?? '-' }}</div>
+                                    <div class="info-value">{{ $leave->user->teamDepartment->name ?? '-' }}</div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="info-group">
                             <div class="info-label"><i class="fas fa-user-tie me-1"></i> Manager</div>
-                            <div class="info-value">{{ $leave->user->manager_departement ?? '-' }}</div>
+                            <div class="info-value">
+                                {{ $leave->user->teamDepartment->department->manager_department ?? '-' }}
+                            </div>
                         </div>
 
                         <div class="divider"></div>
@@ -270,15 +282,10 @@
                                 <div>
                                     <div class="info-label">Tanggal Cuti</div>
                                     <div class="info-value">
-                                        {{ $leave->tanggal_mulai }} s/d {{ $leave->tanggal_selesai }}
+                                        {{ $leave->start_date }} s/d {{ $leave->end_date }}
                                         <span class="badge bg-secondary ms-2">
-                                            <?php
-                                            // Mengasumsikan format tanggal Y-m-d
-                                            $date1 = new DateTime($leave->tanggal_mulai);
-                                            $date2 = new DateTime($leave->tanggal_selesai);
-                                            $diff = $date1->diff($date2);
-                                            echo $diff->days + 1 . ' hari';
-                                            ?>
+                                            {{ \Carbon\Carbon::parse($leave->start_date)->diffInDays(\Carbon\Carbon::parse($leave->end_date)) + 1 }}
+                                            hari
                                         </span>
                                     </div>
                                 </div>
@@ -287,22 +294,37 @@
 
                         <div class="leave-reason">
                             <div class="info-label"><i class="fas fa-comment-alt me-1"></i> Alasan Cuti</div>
-                            <div class="info-value">{{ $leave->alasan }}</div>
+                            <div class="info-value">{{ $leave->reason ?? '-' }}</div>
                         </div>
 
-                        @if ($leave->approved_manager === 'pending')
-                        <div class="divider"></div>
-                        <div class="action-buttons">
-                            <form method="POST" action="{{ route('admin.leaves.updateStatus', $leave->id) }}" class="d-flex justify-content-center">
-                                @csrf
-                                <button type="submit" name="approved_manager" value="approved" class="btn btn-action btn-approve me-3">
-                                    <i class="fas fa-check me-2"></i> Setujui
-                                </button>
-                                <button type="submit" name="approved_manager" value="rejected" class="btn btn-action btn-reject">
-                                    <i class="fas fa-times me-2"></i> Tolak
-                                </button>
-                            </form>
-                        </div>
+                        @if ($leave->proof_file)
+                            <div class="leave-proof mt-4">
+                                <div class="info-label">
+                                    <i class="fas fa-file-image me-1"></i> Bukti Cuti
+                                </div>
+                                <div class="info-value">
+                                    <img src="{{ $leave->proof_file }}" alt="Bukti Cuti"
+                                        style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($leave->status === 'pending')
+                            <div class="divider"></div>
+                            <div class="action-buttons">
+                                <form method="POST" action="{{ route('admin.leaves.updateStatus', $leave->id) }}"
+                                    class="d-flex justify-content-center">
+                                    @csrf
+                                    <button type="submit" name="status" value="approved"
+                                        class="btn btn-action btn-approve me-3">
+                                        <i class="fas fa-check me-2"></i> Setujui
+                                    </button>
+                                    <button type="submit" name="status" value="rejected"
+                                        class="btn btn-action btn-reject">
+                                        <i class="fas fa-times me-2"></i> Tolak
+                                    </button>
+                                </form>
+                            </div>
                         @endif
 
                         <div class="text-center mt-4">
@@ -316,6 +338,7 @@
         </div>
     </div>
 
+
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -326,7 +349,7 @@
             setTimeout(() => {
                 card.style.opacity = '1';
             }, 200);
-            
+
             // Tooltip untuk tombol
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
@@ -340,4 +363,5 @@
         });
     </script>
 </body>
+
 </html>

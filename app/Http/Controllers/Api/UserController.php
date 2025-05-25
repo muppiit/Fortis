@@ -6,50 +6,60 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    // Mendapatkan data profile user yang sedang login
+    // Tampilkan profile lengkap user
     public function profile()
     {
-        $user = auth('api')->user();
+        $user = Auth::user();
+
+        // Ambil relasi untuk response
+        $teamDepartment = $user->teamDepartment;
+        $department = $teamDepartment ? $teamDepartment->department : null;
+        $manager = $department ? $department->manager_department : null;
 
         return response()->json([
-            'nip'               => $user->nip,
-            'nama'              => $user->nama,
-            'departement'       => $user->departement,
-            'team_departement'  => $user->team_departement,
+            'nip' => $user->nip,
+            'name' => $user->name,
+            'department' => $department ? $department->department : null,
+            'team_department' => $teamDepartment ? $teamDepartment->name : null,
+            'manager_department' => $manager,
         ]);
     }
 
-    // Mengedit profile: nama dan password
-    public function editProfile(Request $request)
+    public function updateProfile(Request $request)
     {
         /** @var \App\Models\User $user */
-        $user = auth('api')->user();
+        $user = Auth::user();
 
-        $validated = $request->validate([
-            'nama'     => 'nullable|string|max:255',
-            'password' => 'nullable|string|min:6|confirmed',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|string|min:6|confirmed', 
+            // password_confirmation harus ada jika password diisi
         ]);
 
-        $user->nama = $validated['nama'];
-
-        if (!empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
 
-        $user->save(); // <--- Tidak akan merah lagi jika IDE tahu ini adalah instance dari User
+        $user->name = $request->name;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
 
         return response()->json([
-            'message' => 'Profile updated successfully.',
-            'user'    => [
-                'nip'              => $user->nip,
-                'nama'             => $user->nama,
-                'departement'      => $user->departement,
-                'team_departement' => $user->team_departement,
-            ]
+            'message' => 'Profil berhasil diperbarui',
+            'user' => [
+                'nip' => $user->nip,
+                'name' => $user->name,
+            ],
         ]);
     }
+
 }

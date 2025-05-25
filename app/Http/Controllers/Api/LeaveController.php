@@ -5,120 +5,59 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Leave;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class LeaveController extends Controller
 {
-    // 1. Sick Leave 
-    public function sickLeave(Request $request)
+    // Ajukan cuti
+    public function apply(Request $request)
     {
-        $user = auth('api')->user();  // Ambil user yang login
+        $user = Auth::user();
 
-        $validated = $request->validate([
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+        $validator = Validator::make($request->all(), [
+            'type' => 'required|in:paid,sick',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'reason' => 'required|string|max:255',
+            'proof_file' => 'nullable|image|max:2048',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $proofUrl = null;
+
+        if ($request->hasFile('proof_file')) {
+            $uploadedFileUrl = Cloudinary::upload($request->file('proof_file')->getRealPath())->getSecurePath();
+            $proofUrl = $uploadedFileUrl;
+        }
 
         $leave = Leave::create([
-            'nip' => $user->nip,  // otomatis dari user login
-            'type' => 'sick',
-            'tanggal_mulai' => $validated['tanggal_mulai'],
-            'tanggal_selesai' => $validated['tanggal_selesai'],
-            'approved_manager' => 'pending',
+            'user_nip' => $user->nip,
+            'type' => $request->type,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'reason' => $request->reason,
+            'proof_file' => $proofUrl,
+            'status' => 'pending',
         ]);
-
-        return response()->json(['message' => 'Sick leave requested', 'leave' => $leave]);
-    }
-
-    // 2. Paid Leave 
-    public function paidLeave(Request $request)
-    {
-        $user = auth('api')->user();
-
-        $validated = $request->validate([
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'alasan' => 'required|string',
-        ]);
-
-        $leave = Leave::create([
-            'nip' => $user->nip,
-            'type' => 'paid',
-            'tanggal_mulai' => $validated['tanggal_mulai'],
-            'tanggal_selesai' => $validated['tanggal_selesai'],
-            'alasan' => $validated['alasan'],
-            'approved_manager' => 'pending',
-        ]);
-
-        return response()->json(['message' => 'Paid leave requested', 'leave' => $leave]);
-    }
-
-
-    // 3. List Leave - filter by status, nama, tanggal
-    public function listLeave(Request $request)
-    {
-        $query = Leave::query();
-
-        // Filter by approved_manager status
-        if ($request->has('approved_manager')) {
-            $query->where('approved_manager', $request->approved_manager);
-        }
-
-        // Filter by user's name (join with users table)
-        if ($request->has('nama')) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('nama', 'like', '%' . $request->nama . '%');
-            });
-        }
-
-        // Filter by tanggal (check if any leave falls in this date)
-        if ($request->has('tanggal')) {
-            $tanggal = $request->tanggal;
-            $query->where(function ($q) use ($tanggal) {
-                $q->where('tanggal_mulai', '<=', $tanggal)
-                    ->where('tanggal_selesai', '>=', $tanggal);
-            });
-        }
-
-        $leaves = $query->with('user')->get();
-
-        // Format response
-        $result = $leaves->map(function ($leave) {
-            return [
-                'id' => $leave->id,
-                'status' => $leave->approved_manager,
-                'nama' => $leave->user->nama ?? null,
-                'tanggal_mulai' => $leave->tanggal_mulai,
-                'tanggal_selesai' => $leave->tanggal_selesai,
-            ];
-        });
-
-        return response()->json($result);
-    }
-
-    // 4. Detail Leave - by leave ID or nip
-    public function detailLeave($id)
-    {
-        $leave = Leave::with('user')->find($id);
-
-        if (!$leave) {
-            return response()->json(['message' => 'Leave not found'], 404);
-        }
-
-        $user = $leave->user;
 
         return response()->json([
-            'id' => $leave->id,
-            'status' => $leave->approved_manager,
-            'nama' => $user->nama ?? null,
-            'tanggal_mulai' => $leave->tanggal_mulai,
-            'tanggal_selesai' => $leave->tanggal_selesai,
-            'departement' => $user->departement ?? null,
-            'team_departement' => $user->team_departement ?? null,
-            'manager_departement' => $user->manager_departement ?? null,
-            'type' => $leave->type,
-            'alasan' => $leave->alasan,
+            'message' => 'Pengajuan cuti berhasil dikirim',
+            'leave' => $leave,
         ]);
+    }
+
+    // List pengajuan cuti milik user
+    public function myLeaves()
+    {
+        $user = Auth::user();
+
+        $leaves = Leave::where('user_nip', $user->nip)->latest()->get();
+
+        return response()->json($leaves);
     }
 }

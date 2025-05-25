@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -112,8 +113,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .nav-buttons {
@@ -145,28 +153,29 @@
             margin-right: 8px;
         }
 
-    .logout-btn {
-        font-size: 16px;
-        padding: 10px 20px;
-        border-radius: 4px;
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-    }
+        .logout-btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
 
-    .logout-btn:hover {
-        background-color: #c82333;
-        transform: scale(1.05);
-    }
+        .logout-btn:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
 
-    .logout-btn i {
-        font-size: 18px;
-    }
+        .logout-btn i {
+            font-size: 18px;
+        }
+
         .action-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -202,9 +211,17 @@
             color: white;
         }
 
-        .card-user { background-color: var(--primary); }
-        .card-attendance { background-color: var(--warning); }
-        .card-leave { background-color: var(--info); }
+        .card-user {
+            background-color: var(--primary);
+        }
+
+        .card-attendance {
+            background-color: var(--warning);
+        }
+
+        .card-leave {
+            background-color: var(--info);
+        }
 
         .card-content h3 {
             font-size: 16px;
@@ -259,7 +276,8 @@
             border-collapse: collapse;
         }
 
-        .user-table th, .user-table td {
+        .user-table th,
+        .user-table td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #eee;
@@ -328,7 +346,8 @@
             transition: all 0.3s ease;
         }
 
-        .pagination a:hover, .pagination a.active {
+        .pagination a:hover,
+        .pagination a.active {
             background-color: var(--primary);
             color: white;
         }
@@ -338,34 +357,35 @@
             .action-cards {
                 grid-template-columns: 1fr;
             }
-            
+
             .header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .welcome-gif {
                 display: none;
             }
-            
+
             .user-table {
                 display: block;
                 overflow-x: auto;
             }
-            
+
             .nav-buttons {
                 flex-wrap: wrap;
             }
-            
-            .nav-btn, .logout-btn {
+
+            .nav-btn,
+            .logout-btn {
                 margin-bottom: 10px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
-        <!-- Main Content -->
         <div class="main-content">
             @if (session('success'))
                 <div class="success-alert">
@@ -373,29 +393,55 @@
                     <span>{{ session('success') }}</span>
                 </div>
             @endif
-            
+
             <div class="header">
                 <div class="user-welcome">
                     <div class="user-avatar">
                         <i class="fas fa-user"></i>
                     </div>
                     <div class="user-info">
-                        <h1>Halo, {{ $nama }}</h1>
+                        <h1>Halo, {{ auth()->user()->name }}</h1>
                         <p>Selamat datang di dashboard admin.</p>
-                        <p>Role: <strong>{{ $role }}</strong></p>
-                </form>
-            </div>
+                        <p>Role: <strong>{{ auth()->user()->role->level }}</strong></p>
+                    </div>
                 </div>
+
                 <div class="nav-buttons">
-                <form action="{{ route('admin.logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <form action="{{ route('admin.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
                 </div>
             </div>
+
             <div class="action-cards">
-                <div class="card" onclick="location.href='{{ route('admin.create.user.form') }}'">
+                @if (auth()->user()->role->level === 'super_super_admin')
+                    <div class="card" onclick="location.href='{{ route('admin.roles.index') }}'">
+                        <div class="card-icon card-user">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Kelola Role</h3>
+                            <p>Manajemen data role sistem</p>
+                        </div>
+                    </div>
+                @endif
+
+                @if (auth()->user()->role->level === 'super_super_admin')
+                    <div class="card" onclick="location.href='{{ route('admin.departments.index') }}'">
+                        <div class="card-icon card-user">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Manajemen Departemen</h3>
+                            <p>Lihat dan atur departemen</p>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="card" onclick="location.href='{{ route('admin.create-user') }}'">
                     <div class="card-icon card-user">
                         <i class="fas fa-user-plus"></i>
                     </div>
@@ -404,8 +450,8 @@
                         <p>Tambahkan pengguna ke sistem</p>
                     </div>
                 </div>
-                
-                <div class="card" onclick="location.href='{{ route('admin.attendances') }}'">
+
+                <div class="card" onclick="location.href='{{ route('admin.attendances.index') }}'">
                     <div class="card-icon card-attendance">
                         <i class="fas fa-calendar-check"></i>
                     </div>
@@ -414,7 +460,7 @@
                         <p>Lihat kehadiran pegawai</p>
                     </div>
                 </div>
-                
+
                 <div class="card" onclick="location.href='{{ route('admin.leaves.index') }}'">
                     <div class="card-icon card-leave">
                         <i class="fas fa-calendar-minus"></i>
@@ -425,7 +471,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="user-table-section">
                 <div class="section-header">
                     <h2>Daftar User dan Admin</h2>
@@ -434,36 +480,51 @@
                         <input type="text" id="searchInput" placeholder="Cari user...">
                     </div>
                 </div>
-                
+
                 <table class="user-table" id="userTable">
                     <thead>
                         <tr>
                             <th>NIP</th>
                             <th>Nama</th>
                             <th>Role</th>
-                            <th>Departement</th>
-                            <th>Team Departement</th>
-                            <th>Manager Departement</th>
+                            <th>Departemen</th>
+                            <th>Team Departemen</th>
+                            <th>Manager Departemen</th>
+                            <th>Aksi</th> 
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($users as $u)
                             <tr>
                                 <td>{{ $u->nip }}</td>
-                                <td>{{ $u->nama }}</td>
+                                <td>{{ $u->name }}</td>
                                 <td>
-                                    <span class="role-badge {{ $u->role == 'admin' ? 'role-admin' : 'role-user' }}">
-                                        {{ $u->role }}
+                                    <span class="role-badge role-{{ $u->role->level }}">
+                                        {{ $u->role->level }}
                                     </span>
                                 </td>
-                                <td>{{ $u->departement }}</td>
-                                <td>{{ $u->team_departement }}</td>
-                                <td>{{ $u->manager_departement }}</td>
+                                <td>{{ $u->teamDepartment->department->department ?? '-' }}</td>
+                                <td>{{ $u->teamDepartment->name ?? '-' }}</td>
+                                <td>{{ $u->teamDepartment->department->manager_department ?? '-' }}</td>
+                                <td>
+                                    <a href="{{ route('admin.edit-user', $u->nip) }}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form action="{{ route('admin.delete-user', $u->nip) }}" method="POST"
+                                        style="display:inline-block;"
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash-alt"></i> Hapus
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                
+
                 <ul class="pagination">
                     <li><a href="#"><i class="fas fa-chevron-left"></i></a></li>
                     <li><a href="#" class="active">1</a></li>
@@ -474,29 +535,29 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Search functionality
         const searchInput = document.getElementById('searchInput');
         const userTable = document.getElementById('userTable');
         const rows = userTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-        
+
         searchInput.addEventListener('keyup', function() {
             const searchTerm = searchInput.value.toLowerCase();
-            
+
             for (let i = 0; i < rows.length; i++) {
                 let found = false;
                 const cells = rows[i].getElementsByTagName('td');
-                
+
                 for (let j = 0; j < cells.length; j++) {
                     const cellText = cells[j].textContent.toLowerCase();
-                    
+
                     if (cellText.indexOf(searchTerm) > -1) {
                         found = true;
                         break;
                     }
                 }
-                
+
                 if (found) {
                     rows[i].style.display = '';
                 } else {
@@ -504,27 +565,27 @@
                 }
             }
         });
-        
+
         // Success alert fade out
         const successAlert = document.querySelector('.success-alert');
         if (successAlert) {
             setTimeout(function() {
                 successAlert.style.opacity = '0';
                 successAlert.style.transition = 'opacity 0.5s ease';
-                
+
                 setTimeout(function() {
                     successAlert.style.display = 'none';
                 }, 500);
             }, 5000);
         }
-        
+
         // Add fade-in animation for cards
         const cards = document.querySelectorAll('.card');
         cards.forEach((card, index) => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(20px)';
             card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            
+
             setTimeout(() => {
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
@@ -532,4 +593,5 @@
         });
     </script>
 </body>
+
 </html>

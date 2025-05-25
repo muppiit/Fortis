@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,7 +168,7 @@
             background-color: white;
         }
 
-        .form-control:focus + .icon {
+        .form-control:focus+.icon {
             color: var(--primary);
         }
 
@@ -284,6 +285,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -312,13 +314,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="create-user-container animated">
         <div class="form-header">
             <h2>Buat User Baru</h2>
             <p>Isi formulir di bawah untuk membuat pengguna baru</p>
         </div>
-        
+
         @if ($errors->any())
             <div class="error-container animated">
                 <ul>
@@ -328,96 +331,144 @@
                 </ul>
             </div>
         @endif
-        
-        <form action="{{ route('admin.create.user') }}" method="POST" id="createUserForm">
+
+        <form action="{{ route('admin.store-user') }}" method="POST" id="createUserForm">
             @csrf
-            
+
             <div class="form-body">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nip">Nomor Induk Pegawai (NIP)</label>
                         <div class="input-with-icon">
-                            <input type="text" id="nip" name="nip" class="form-control" placeholder="Masukkan NIP" value="{{ old('nip') }}" required>
+                            <input type="text" id="nip" name="nip" class="form-control"
+                                placeholder="Masukkan NIP" value="{{ old('nip') }}" required>
                             <span class="icon"><i class="fas fa-id-card"></i></span>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
-                        <label for="nama">Nama Lengkap</label>
+                        <label for="name">Nama Lengkap</label>
                         <div class="input-with-icon">
-                            <input type="text" id="nama" name="nama" class="form-control" placeholder="Masukkan nama lengkap" value="{{ old('nama') }}" required>
+                            <input type="text" id="name" name="name" class="form-control"
+                                placeholder="Masukkan nama lengkap" value="{{ old('name') }}" required>
                             <span class="icon"><i class="fas fa-user"></i></span>
                         </div>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-with-icon">
+                        <input type="email" id="email" name="email" class="form-control"
+                            placeholder="Masukkan email" value="{{ old('email') }}" required>
+                        <span class="icon"><i class="fas fa-envelope"></i></span>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="input-with-icon">
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan password" required>
+                        <input type="password" id="password" name="password" class="form-control"
+                            placeholder="Masukkan password" required>
                         <span class="icon"><i class="fas fa-lock"></i></span>
                         <span class="password-toggle" id="passwordToggle"><i class="fas fa-eye"></i></span>
                     </div>
                     <div class="password-strength">
                         <div class="password-strength-meter" id="passwordStrengthMeter"></div>
                     </div>
-                    <div class="password-strength-text" id="passwordStrengthText">Kekuatan password: belum dimasukkan</div>
+                    <div class="password-strength-text" id="passwordStrengthText">Kekuatan password: belum dimasukkan
+                    </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="role">Role</label>
+                    <label for="password_confirmation">Konfirmasi Password</label>
                     <div class="input-with-icon">
-                        <select name="role" id="role" class="form-control">
-                            <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
-                            <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                        <input type="password" id="password_confirmation" name="password_confirmation"
+                            class="form-control" placeholder="Ulangi password" required>
+                        <span class="icon"><i class="fas fa-lock"></i></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="role_id">Role</label>
+                    <div class="input-with-icon">
+                        <select name="role_id" id="role_id" class="form-control" required>
+                            <option value="">Pilih Role</option>
+                            @php $currentLevel = auth()->user()->role->level; @endphp
+                            @foreach ($roles as $role)
+                                @if (
+                                    $currentLevel === 'super_super_admin' ||
+                                        ($currentLevel === 'super_admin' && in_array($role->level, ['admin', 'user'])) ||
+                                        ($currentLevel === 'admin' && $role->level === 'user'))
+                                    <option value="{{ $role->id }}"
+                                        {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                        {{ ucfirst(str_replace('_', ' ', $role->level)) }}
+                                    </option>
+                                @endif
+                            @endforeach
                         </select>
                         <span class="icon"><i class="fas fa-user-tag"></i></span>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="departement">Departemen</label>
+                    <label for="department_id">Departemen</label>
                     <div class="input-with-icon">
-                        <input type="text" id="departement" name="departement" class="form-control" placeholder="Masukkan departemen" value="{{ old('departement') }}" required>
+                        @if ($currentLevel === 'super_super_admin')
+                            <select name="department_id" id="department_id" class="form-control" required>
+                                <option value="">Pilih Departemen</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}"
+                                        {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                        {{ $department->department }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @else
+                            <input type="hidden" name="department_id"
+                                value="{{ auth()->user()->teamDepartment->department_id }}">
+                            <input type="text" class="form-control"
+                                value="{{ auth()->user()->teamDepartment->department->department }}" disabled>
+                        @endif
                         <span class="icon"><i class="fas fa-building"></i></span>
                     </div>
                 </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="team_departement">Tim Departemen</label>
-                        <div class="input-with-icon">
-                            <input type="text" id="team_departement" name="team_departement" class="form-control" placeholder="Masukkan tim departemen" value="{{ old('team_departement') }}" required>
-                            <span class="icon"><i class="fas fa-users"></i></span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="manager_departement">Manajer Departemen</label>
-                        <div class="input-with-icon">
-                            <input type="text" id="manager_departement" name="manager_departement" class="form-control" placeholder="Masukkan manajer departemen" value="{{ old('manager_departement') }}" required>
-                            <span class="icon"><i class="fas fa-user-tie"></i></span>
-                        </div>
+
+                <div class="form-group">
+                    <label for="team_department_id">Team Departemen</label>
+                    <div class="input-with-icon">
+                        @if ($currentLevel === 'super_super_admin' || $currentLevel === 'super_admin')
+                            <select name="team_department_id" id="team_department_id" class="form-control" required>
+                                <option value="">Pilih Team Departemen</option>
+                                {{-- Diisi via JS --}}
+                            </select>
+                        @else
+                            <input type="hidden" name="team_department_id"
+                                value="{{ auth()->user()->team_department_id }}">
+                            <input type="text" class="form-control"
+                                value="{{ auth()->user()->teamDepartment->name }}" disabled>
+                        @endif
+                        <span class="icon"><i class="fas fa-users"></i></span>
                     </div>
                 </div>
-            </div>
-            
-            <div class="form-footer">
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Kembali
-                </a>
-                <button type="submit" class="btn btn-primary" id="submitBtn">
-                    <i class="fas fa-save"></i> Buat User
-                </button>
-            </div>
+
+                <div class="form-footer">
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i> Buat User
+                    </button>
+                </div>
         </form>
+
     </div>
-    
+
     <script>
         // Toggle password visibility
         const passwordToggle = document.getElementById('passwordToggle');
         const passwordInput = document.getElementById('password');
-        
+
         passwordToggle.addEventListener('click', function() {
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
@@ -427,37 +478,37 @@
                 this.innerHTML = '<i class="fas fa-eye"></i>';
             }
         });
-        
+
         // Password strength meter
         const passwordStrengthMeter = document.getElementById('passwordStrengthMeter');
         const passwordStrengthText = document.getElementById('passwordStrengthText');
-        
+
         passwordInput.addEventListener('input', function() {
             const value = passwordInput.value;
             let strength = 0;
             let message = '';
-            
+
             if (value.length > 0) {
                 // Length check
                 if (value.length >= 8) {
                     strength += 25;
                 }
-                
+
                 // Uppercase check
                 if (/[A-Z]/.test(value)) {
                     strength += 25;
                 }
-                
+
                 // Number check
                 if (/[0-9]/.test(value)) {
                     strength += 25;
                 }
-                
+
                 // Special character check
                 if (/[^A-Za-z0-9]/.test(value)) {
                     strength += 25;
                 }
-                
+
                 // Set message based on strength
                 if (strength <= 25) {
                     message = 'Lemah';
@@ -475,19 +526,19 @@
             } else {
                 message = 'Belum dimasukkan';
             }
-            
+
             passwordStrengthMeter.style.width = strength + '%';
             passwordStrengthText.textContent = 'Kekuatan password: ' + message;
         });
-        
+
         // Form validation
         const form = document.getElementById('createUserForm');
         const submitBtn = document.getElementById('submitBtn');
-        
+
         form.addEventListener('submit', function(e) {
             let valid = true;
             const inputs = form.querySelectorAll('input[required]');
-            
+
             inputs.forEach(input => {
                 if (input.value.trim() === '') {
                     valid = false;
@@ -498,7 +549,7 @@
                     input.style.backgroundColor = '#f9fafc';
                 }
             });
-            
+
             if (!valid) {
                 e.preventDefault();
                 // Create error message if doesn't exist
@@ -506,17 +557,17 @@
                 if (!errorContainer) {
                     errorContainer = document.createElement('div');
                     errorContainer.className = 'error-container animated';
-                    
+
                     const errorList = document.createElement('ul');
                     const errorItem = document.createElement('li');
                     errorItem.innerHTML = '<i class="fas fa-exclamation-circle"></i> Semua field harus diisi';
-                    
+
                     errorList.appendChild(errorItem);
                     errorContainer.appendChild(errorList);
-                    
+
                     form.parentNode.insertBefore(errorContainer, form);
                 }
-                
+
                 // Scroll to top to show error
                 window.scrollTo({
                     top: 0,
@@ -524,20 +575,67 @@
                 });
             }
         });
-        
+
         // Custom form animations
         const formGroups = document.querySelectorAll('.form-group');
-        
+
         formGroups.forEach((group, index) => {
             group.style.opacity = '0';
             group.style.transform = 'translateY(20px)';
             group.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            
+
             setTimeout(() => {
                 group.style.opacity = '1';
                 group.style.transform = 'translateY(0)';
             }, 100 * (index + 1));
         });
+
+        
+        // Populate team department based on selected department
+        const allTeams = @json($teamDepartments);
+        const currentLevel = "{{ $currentLevel }}";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const departmentSelect = document.getElementById("department_id");
+            const teamSelect = document.getElementById("team_department_id");
+
+            function populateTeams(departmentId) {
+                if (!teamSelect) return;
+
+                teamSelect.innerHTML = '<option value="">Pilih Team Departemen</option>';
+                const filtered = allTeams.filter(team => team.department_id == departmentId);
+
+                filtered.forEach(team => {
+                    const option = document.createElement("option");
+                    option.value = team.id;
+                    option.textContent = team.name;
+                    teamSelect.appendChild(option);
+                });
+
+                const oldSelected = "{{ old('team_department_id') }}";
+                if (oldSelected) {
+                    teamSelect.value = oldSelected;
+                }
+            }
+
+            // Super Super Admin → pilih departemen bebas
+            if (currentLevel === "super_super_admin") {
+                if (departmentSelect && departmentSelect.value) {
+                    populateTeams(departmentSelect.value);
+                }
+
+                departmentSelect?.addEventListener("change", function() {
+                    populateTeams(this.value);
+                });
+            }
+
+            // Super Admin → departemen tetap (yang sedang login), isi team departemen otomatis
+            if (currentLevel === "super_admin") {
+                const fixedDeptId = "{{ auth()->user()->teamDepartment->department_id }}";
+                populateTeams(fixedDeptId);
+            }
+        });
     </script>
 </body>
+
 </html>
