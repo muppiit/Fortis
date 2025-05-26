@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LeaveController;
+use App\Http\Controllers\Api\MeetingController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +50,12 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::get('/profile', [UserController::class, 'profile']);
     Route::put('/profile', [UserController::class, 'updateProfile']);
+});
+
+//meeting
+Route::middleware('auth:api')->group(function () {
+    Route::get('/departments', [MeetingController::class, 'getDepartments']);
+    Route::get('/departments/{id}/teams', [MeetingController::class, 'getTeamDepartments']);
+    Route::post('/teams/users', [MeetingController::class, 'getUsersFromTeams']);
+    Route::post('/meetings', [MeetingController::class, 'store']);
 });
