@@ -33,3 +33,4 @@
         @endforeach
     </tbody>
 </table>
+<a href="{{ route('admin.dashboard') }}">kembali</a>

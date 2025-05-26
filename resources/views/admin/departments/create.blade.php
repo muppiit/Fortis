@@ -18,6 +18,6 @@
         </div>
         
         <button type="submit" class="btn-submit">Simpan</button>
-        <a href="{{ route('admin.departments.index') }}" class="btn-cancel">Batal</a>
+        <a href="{{ route('admin.departments.index') }}" class="btn-cancel">kembali</a>
     </form>
 </div>

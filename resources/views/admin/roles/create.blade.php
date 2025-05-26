@@ -14,3 +14,4 @@
     </select>
     <button type="submit">Simpan</button>
 </form>
+<a href="{{ route('admin.roles.index') }}">kembali</a>

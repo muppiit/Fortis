@@ -40,9 +40,9 @@ Route::middleware('auth:api')->group(function () {
 });
 
 // Leave
-Route::middleware('auth:api')->prefix('leave')->group(function () {
-    Route::post('/apply', [LeaveController::class, 'apply']);
-    Route::get('/my', [LeaveController::class, 'myLeaves']);
+Route::middleware('auth:api')->group(function () {
+    Route::post('/leave/apply', [LeaveController::class, 'apply']);
+    Route::get('/leave/my', [LeaveController::class, 'myLeaves']);
 });
 
 // User Profile
