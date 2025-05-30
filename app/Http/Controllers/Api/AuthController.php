@@ -51,7 +51,7 @@ class AuthController extends Controller
     public function refresh()
     {
         try {
-            $newToken = JWTAuth::refresh();
+            $newToken = JWTAuth::setToken(JWTAuth::getToken())->refresh();
             return response()->json([
                 'access_token' => $newToken,
                 'token_type'   => 'bearer',
@@ -61,5 +61,6 @@ class AuthController extends Controller
             return response()->json(['error' => 'Token invalid'], 401);
         }
     }
+
     
 }
