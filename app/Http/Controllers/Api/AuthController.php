@@ -39,7 +39,10 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json(auth('api')->user());
+        if(Auth::guard('api')->check()) {
+            return response()->json(auth('api')->user());
+        }
+        return response()->json(['error' => 'Unauthenticated'], 401);
     }
 
     public function logout()
