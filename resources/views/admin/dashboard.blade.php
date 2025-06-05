@@ -127,8 +127,7 @@
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-bottom: center;
-            size: 40cm
+            margin-bottom: 20px;
         }
 
         .nav-btn {
@@ -320,6 +319,66 @@
             color: #4cc9f0;
         }
 
+        .role-super_super_admin {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        /* Action Buttons Styles */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            min-width: fit-content;
+        }
+
+        .btn i {
+            font-size: 12px;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: #fff;
+        }
+
+        .btn-warning:hover {
+            background-color: #e6a200;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #d12b36;
+            transform: translateY(-1px);
+        }
+
+        .action-form {
+            display: inline-block;
+        }
+
         /* Pagination */
         .pagination {
             display: flex;
@@ -380,6 +439,33 @@
             .logout-btn {
                 margin-bottom: 10px;
             }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+
+            .user-table th,
+            .user-table td {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .btn {
+                font-size: 10px;
+                padding: 4px 6px;
+            }
         }
     </style>
 </head>
@@ -387,6 +473,7 @@
 <body>
     <div class="dashboard-container">
         <div class="main-content">
+            <!-- Success Alert (Laravel Blade syntax maintained for reference) -->
             @if (session('success'))
                 <div class="success-alert">
                     <i class="fas fa-check-circle"></i>
@@ -507,18 +594,20 @@
                                 <td>{{ $u->teamDepartment->name ?? '-' }}</td>
                                 <td>{{ $u->teamDepartment->department->manager_department ?? '-' }}</td>
                                 <td>
-                                    <a href="{{ route('admin.edit-user', $u->nip) }}" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <form action="{{ route('admin.delete-user', $u->nip) }}" method="POST"
-                                        style="display:inline-block;"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash-alt"></i> Hapus
-                                        </button>
-                                    </form>
+                                    <div class="action-buttons">
+                                        <a href="{{ route('admin.edit-user', $u->nip) }}" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <form action="{{ route('admin.delete-user', $u->nip) }}" method="POST"
+                                            class="action-form"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash-alt"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -591,7 +680,55 @@
                 card.style.transform = 'translateY(0)';
             }, 100 * (index + 1));
         });
+
+        // Add click effect for buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.height, rect.width);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
     </script>
+
+    <style>
+        /* Ripple effect for buttons */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
 </body>
 
 </html>
