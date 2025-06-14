@@ -27,6 +27,11 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/verify-token', [AuthController::class, 'verifyToken']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/resend-otp', [AuthController::class, 'resendOtp']);
+
     Route::middleware('auth:api')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
@@ -38,10 +43,11 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn']);
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut']);
+    Route::get('/attendances/list', [AttendanceController::class, 'listAttendance']);
 });
 
 // Leave
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:api')->group(function () {  
     Route::post('/leave/apply', [LeaveController::class, 'apply']);
     Route::get('/leave/my', [LeaveController::class, 'myLeaves']);
 });
