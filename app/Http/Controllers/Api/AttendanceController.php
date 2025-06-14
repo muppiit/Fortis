@@ -70,8 +70,6 @@ class AttendanceController extends Controller
     }
 
 
-
-
     // clock-out
     public function clockOut(Request $request)
     {
@@ -136,6 +134,19 @@ class AttendanceController extends Controller
     }
 
 
+    public function listAttendance(Request $request)
+    {
+        $user = auth()->user();
+
+        $attendances = Attendance::where('user_nip', $user->nip)
+            ->orderBy('waktu', 'desc')
+            ->get();
+
+        return response()->json([
+            'message' => 'Daftar absensi berhasil diambil',
+            'data' => $attendances,
+        ]);
+    }
 
 
     private function fullHourOnly($minutes)
