@@ -24,6 +24,7 @@ class UserController extends Controller
         return response()->json([
             'nip' => $user->nip,
             'name' => $user->name,
+            'email' => $user->email,
             'department' => $department ? $department->department : null,
             'team_department' => $teamDepartment ? $teamDepartment->name : null,
             'manager_department' => $manager,
