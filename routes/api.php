@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
+
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/verify-token', [AuthController::class, 'verifyToken']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
@@ -40,6 +41,7 @@ Route::prefix('auth')->group(function () {
 });
 
 // Attendance
+Route::get('/working-hours', [AttendanceController::class, 'getWorkingHours']);
 Route::middleware('auth:api')->group(function () {
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn']);
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut']);

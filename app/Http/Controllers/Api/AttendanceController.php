@@ -148,6 +148,20 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function getWorkingHours()
+    {
+        $workingHour = WorkingHour::first();
+
+        if (!$workingHour) {
+            return response()->json(['message' => 'Jam kerja belum disetel'], 404);
+        }
+
+        return response()->json([
+            'clock_in_time' => $workingHour->clock_in_time,
+            'clock_out_time' => $workingHour->clock_out_time,
+        ]);
+    }
+
 
     private function fullHourOnly($minutes)
     {
