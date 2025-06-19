@@ -66,4 +66,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/departments/{id}/teams', [MeetingController::class, 'getTeamDepartments']);
     Route::post('/teams/users', [MeetingController::class, 'getUsersFromTeams']);
     Route::post('/meetings', [MeetingController::class, 'store']);
+     Route::get('/meetings', [MeetingController::class, 'index']);
 });

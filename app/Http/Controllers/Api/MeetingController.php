@@ -110,4 +110,101 @@ class MeetingController extends Controller
             'head_department' => $headDepartement,
         ]);
     }
+
+    public function index()
+    {
+        $user = Auth::user();
+
+        // Ambil semua meeting yang dibuat oleh user
+        $createdMeetings = Meeting::with(['creator', 'invitations'])
+            ->where('created_by_nip', $user->nip)
+            ->get();
+
+        // Ambil semua meeting yang mengundang user
+        $invitedMeetingIds = MeetingInvitation::where(function ($query) use ($user) {
+            $query->where(function ($q) use ($user) {
+                $q->where('invite_type', 'user')
+                    ->where('invite_target', $user->nip);
+            })->orWhere(function ($q) use ($user) {
+                $q->where('invite_type', 'team')
+                    ->where('invite_target', $user->team_department_id);
+            })->orWhere(function ($q) use ($user) {
+                $q->where('invite_type', 'department')
+                    ->where('invite_target', optional($user->teamDepartment)->department_id);
+            });
+        })->pluck('meeting_id');
+
+        $invitedMeetings = Meeting::with(['creator', 'invitations'])
+            ->whereIn('id', $invitedMeetingIds)
+            ->get();
+
+        // Gabungkan dan hilangkan duplikat
+        $meetings = $createdMeetings->merge($invitedMeetings)->unique('id')->sortByDesc('start_time')->values();
+
+        // Format response
+        $result = $meetings->map(function ($meeting) {
+            $department = null;
+            $teamDepartments = [];
+            $invitedUsers = [];
+            $manager = null;
+
+            foreach ($meeting->invitations as $invitation) {
+                if ($invitation->invite_type === 'department') {
+                    $dept = \App\Models\Department::find($invitation->invite_target);
+                    if ($dept) {
+                        $department = [
+                            'id' => $dept->id,
+                            'name' => $dept->department,
+                        ];
+                        $manager = $dept->manager_department;
+                    }
+                }
+
+                if ($invitation->invite_type === 'team') {
+                    $team = \App\Models\TeamDepartment::find($invitation->invite_target);
+                    if ($team) {
+                        $teamDepartments[] = [
+                            'id' => $team->id,
+                            'name' => $team->name,
+                        ];
+                    }
+                }
+
+                if ($invitation->invite_type === 'user') {
+                    $user = \App\Models\User::where('nip', $invitation->invite_target)->first();
+                    if ($user) {
+                        $invitedUsers[] = [
+                            'nip' => $user->nip,
+                            'name' => $user->name,
+                            'email' => $user->email,
+                        ];
+                    }
+                }
+            }
+
+            return [
+                'id' => $meeting->id,
+                'title' => $meeting->title,
+                'description' => $meeting->description,
+                'type' => $meeting->type,
+                'online_url' => $meeting->online_url,
+                'location' => $meeting->location,
+                'start_time' => $meeting->start_time,
+                'end_time' => $meeting->end_time,
+                'created_by' => [
+                    'nip' => $meeting->creator->nip,
+                    'name' => $meeting->creator->name,
+                ],
+                'manager_department' => $manager,
+                'department' => $department,
+                'team_departments' => $teamDepartments,
+                'invited_users' => $invitedUsers,
+            ];
+        });
+
+        return response()->json([
+            'message' => 'List meeting yang dibuat dan yang mengundang user',
+            'data' => $result,
+        ]);
+    }
 }
