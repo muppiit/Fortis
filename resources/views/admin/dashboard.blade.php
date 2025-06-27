@@ -17,6 +17,9 @@
             --danger: #e63946;
             --warning: #ffb703;
             --info: #8ecae6;
+            --purple: #7209b7;
+            --orange: #ff6b35;
+            --teal: #20b2aa;
         }
 
         * {
@@ -27,7 +30,8 @@
         }
 
         body {
-            background-color: #f5f7fb;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             color: #333;
         }
 
@@ -44,11 +48,13 @@
         }
 
         .header {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
             margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -60,231 +66,279 @@
         }
 
         .user-welcome .user-avatar {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            background-color: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--primary));
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 20px;
             color: white;
-            font-size: 24px;
+            font-size: 28px;
+            box-shadow: 0 4px 15px rgba(77, 149, 239, 0.3);
         }
 
         .user-welcome .user-info h1 {
-            font-size: 22px;
+            font-size: 24px;
             margin-bottom: 5px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .user-welcome .user-info p {
             color: #666;
             font-size: 14px;
-        }
-
-        .welcome-gif {
-            width: 120px;
-            height: 120px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .welcome-gif img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            margin-bottom: 3px;
         }
 
         .success-alert {
-            background-color: rgba(76, 201, 240, 0.1);
+            background: rgba(76, 201, 240, 0.15);
+            backdrop-filter: blur(10px);
             border-left: 4px solid var(--success);
-            padding: 15px;
-            border-radius: 5px;
+            padding: 18px 20px;
+            border-radius: 12px;
             margin-bottom: 30px;
             display: flex;
             align-items: center;
-            animation: fadeIn 0.5s ease;
+            animation: slideInFromTop 0.6s ease;
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.2);
         }
 
         .success-alert i {
             color: var(--success);
-            margin-right: 10px;
-            font-size: 20px;
+            margin-right: 12px;
+            font-size: 22px;
         }
 
-        @keyframes fadeIn {
+        @keyframes slideInFromTop {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .nav-btn {
-            padding: 10px 20px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            margin-right: 15px;
-        }
-
-        .nav-btn:hover {
-            background-color: var(--secondary);
-        }
-
-        .nav-btn i {
-            margin-right: 8px;
-        }
-
         .logout-btn {
             font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 4px;
-            background-color: #dc3545;
+            padding: 12px 24px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #dc3545, #c82333);
             color: white;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
         }
 
         .logout-btn:hover {
-            background-color: #c82333;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
         }
 
         .logout-btn i {
             font-size: 18px;
         }
 
+        /* Improved Action Cards */
         .action-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
         }
 
         .card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
         }
 
         .card-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 22px;
+            margin-bottom: 10px;
+            font-size: 20px;
             color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
+        .card:hover .card-icon {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        /* Specific card icon styles */
         .card-user {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .card-role {
+            background: linear-gradient(135deg, var(--purple), #a663cc);
+        }
+
+        .card-department {
+            background: linear-gradient(135deg, var(--info), var(--accent));
+        }
+
+        .card-team {
+            background: linear-gradient(135deg, var(--teal), #48cae4);
         }
 
         .card-attendance {
-            background-color: var(--warning);
+            background: linear-gradient(135deg, var(--warning), var(--orange));
         }
 
         .card-leave {
-            background-color: var(--info);
+            background: linear-gradient(135deg, var(--success), var(--info));
+        }
+
+        .card-content {
+            flex: 1;
         }
 
         .card-content h3 {
-            font-size: 16px;
+            font-size: 14px;
             margin-bottom: 5px;
+            color: var(--dark);
+            font-weight: 600;
+            line-height: 1.2;
         }
 
         .card-content p {
-            font-size: 12px;
-            color: #777;
+            font-size: 11px;
+            color: #666;
+            line-height: 1.3;
+            margin: 0;
         }
 
+        .card-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Table Section Improvements */
         .user-table-section {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .section-header h2 {
-            font-size: 18px;
+            font-size: 22px;
             color: var(--dark);
+            font-weight: 600;
         }
 
         .search-box {
             display: flex;
             align-items: center;
-            background-color: #f5f7fb;
-            border-radius: 5px;
-            padding: 5px 10px;
+            background: rgba(245, 247, 251, 0.8);
+            border-radius: 12px;
+            padding: 8px 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .search-box input {
             border: none;
             background: transparent;
-            padding: 5px;
+            padding: 8px;
             outline: none;
+            font-size: 14px;
         }
 
         .search-box i {
             color: #777;
+            margin-right: 8px;
         }
 
         .user-table {
             width: 100%;
             border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .user-table th,
         .user-table td {
-            padding: 12px 15px;
+            padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .user-table thead th {
-            background-color: #f8f9fa;
-            color: #666;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #555;
             font-weight: 600;
             font-size: 14px;
         }
@@ -294,7 +348,8 @@
         }
 
         .user-table tbody tr:hover {
-            background-color: #f8f9fa;
+            background: rgba(67, 97, 238, 0.05);
+            transform: scale(1.01);
         }
 
         .user-table tbody td {
@@ -302,29 +357,32 @@
         }
 
         .role-badge {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             display: inline-block;
         }
 
         .role-admin {
-            background-color: rgba(243, 80, 114, 0.1);
+            background: linear-gradient(135deg, rgba(243, 80, 114, 0.15), rgba(243, 80, 114, 0.1));
             color: #f35072;
+            border: 1px solid rgba(243, 80, 114, 0.2);
         }
 
         .role-user {
-            background-color: rgba(76, 201, 240, 0.1);
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.15), rgba(76, 201, 240, 0.1));
             color: #4cc9f0;
+            border: 1px solid rgba(76, 201, 240, 0.2);
         }
 
         .role-super_super_admin {
-            background-color: rgba(67, 97, 238, 0.1);
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.15), rgba(67, 97, 238, 0.1));
             color: var(--primary);
+            border: 1px solid rgba(67, 97, 238, 0.2);
         }
 
-        /* Action Buttons Styles */
+        /* Action Buttons Improvements */
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -332,18 +390,19 @@
         }
 
         .btn {
-            padding: 6px 12px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             text-decoration: none;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            min-width: fit-content;
+            gap: 6px;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn i {
@@ -351,120 +410,203 @@
         }
 
         .btn-sm {
-            padding: 4px 8px;
+            padding: 6px 12px;
             font-size: 11px;
         }
 
         .btn-warning {
-            background-color: var(--warning);
+            background: linear-gradient(135deg, var(--warning), #e6a200);
             color: #fff;
+            box-shadow: 0 2px 8px rgba(255, 183, 3, 0.3);
         }
 
         .btn-warning:hover {
-            background-color: #e6a200;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 183, 3, 0.4);
         }
 
         .btn-danger {
-            background-color: var(--danger);
+            background: linear-gradient(135deg, var(--danger), #d12b36);
             color: #fff;
+            box-shadow: 0 2px 8px rgba(230, 57, 70, 0.3);
         }
 
         .btn-danger:hover {
-            background-color: #d12b36;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
         }
 
         .action-form {
             display: inline-block;
         }
 
-        /* Pagination */
+        /* Pagination Improvements */
         .pagination {
             display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
+            justify-content: center;
+            margin-top: 30px;
             list-style: none;
+            gap: 8px;
         }
 
-        .pagination li {
-            margin: 0 5px;
-        }
-
-        .pagination a {
+        .pagination li a {
             display: flex;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             align-items: center;
             justify-content: center;
-            border-radius: 5px;
+            border-radius: 12px;
             text-decoration: none;
             color: var(--dark);
             font-size: 14px;
-            background-color: #f5f7fb;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            font-weight: 600;
         }
 
-        .pagination a:hover,
-        .pagination a.active {
-            background-color: var(--primary);
+        .pagination li a:hover,
+        .pagination li a.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
         }
 
-        /* Responsive Styles */
+        /* Responsive Improvements */
         @media (max-width: 768px) {
             .action-cards {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 12px;
             }
 
             .header {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 20px;
             }
 
-            .welcome-gif {
-                display: none;
+            .user-table-section {
+                padding: 20px;
             }
 
             .user-table {
                 display: block;
                 overflow-x: auto;
-            }
-
-            .nav-buttons {
-                flex-wrap: wrap;
-            }
-
-            .nav-btn,
-            .logout-btn {
-                margin-bottom: 10px;
+                white-space: nowrap;
             }
 
             .action-buttons {
                 flex-direction: column;
-                gap: 4px;
+                gap: 6px;
             }
 
             .btn {
                 width: 100%;
                 justify-content: center;
             }
+
+            .card {
+                padding: 12px;
+                min-height: 100px;
+            }
+
+            .card-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .card-content h3 {
+                font-size: 12px;
+            }
+
+            .card-content p {
+                font-size: 10px;
+            }
         }
 
         @media (max-width: 480px) {
             .main-content {
-                padding: 15px;
+                padding: 20px;
+            }
+
+            .action-cards {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 10px;
             }
 
             .user-table th,
             .user-table td {
-                padding: 8px 10px;
+                padding: 10px 8px;
                 font-size: 12px;
             }
 
             .btn {
                 font-size: 10px;
-                padding: 4px 6px;
+                padding: 6px 10px;
+            }
+
+            .card {
+                padding: 10px;
+                min-height: 90px;
+            }
+
+            .card-content h3 {
+                font-size: 11px;
+            }
+
+            .card-content p {
+                font-size: 9px;
+            }
+
+            .card-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+        }
+
+        /* Animation for card entrance */
+        .card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardFadeIn 0.6s ease forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes cardFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ripple effect for buttons */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
             }
         }
     </style>
@@ -473,7 +615,7 @@
 <body>
     <div class="dashboard-container">
         <div class="main-content">
-            <!-- Success Alert (Laravel Blade syntax maintained for reference) -->
+            <!-- Success Alert -->
             @if (session('success'))
                 <div class="success-alert">
                     <i class="fas fa-check-circle"></i>
@@ -489,72 +631,93 @@
                     <div class="user-info">
                         <h1>Halo, {{ auth()->user()->name }}</h1>
                         <p>Selamat datang di dashboard admin.</p>
-                        <p>Role: <strong>{{ auth()->user()->role->level }}</strong></p>
                     </div>
                 </div>
 
-                <div class="nav-buttons">
-                    <form action="{{ route('admin.logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="logout-btn">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </form>
-                </div>
+                <form action="{{ route('admin.logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
             </div>
 
             <div class="action-cards">
                 @if (auth()->user()->role->level === 'super_super_admin')
                     <div class="card" onclick="location.href='{{ route('admin.roles.index') }}'">
-                        <div class="card-icon card-user">
-                            <i class="fas fa-user-shield"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Kelola Role</h3>
-                            <p>Manajemen data role sistem</p>
+                        <div class="card-content-wrapper">
+                            <div class="card-icon card-role">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Kelola Role</h3>
+                                <p>Manajemen data role sistem dan pengaturan hak akses pengguna</p>
+                            </div>
                         </div>
                     </div>
                 @endif
 
                 @if (auth()->user()->role->level === 'super_super_admin')
                     <div class="card" onclick="location.href='{{ route('admin.departments.index') }}'">
-                        <div class="card-icon card-user">
-                            <i class="fas fa-building"></i>
+                        <div class="card-content-wrapper">
+                            <div class="card-icon card-department">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Manajemen Departemen</h3>
+                                <p>Lihat dan atur departemen serta struktur organisasi</p>
+                            </div>
                         </div>
-                        <div class="card-content">
-                            <h3>Manajemen Departemen</h3>
-                            <p>Lihat dan atur departemen</p>
+                    </div>
+                @endif
+
+                @if (in_array(auth()->user()->role->level, ['super_super_admin', 'super_admin']))
+                    <div class="card" onclick="location.href='{{ route('admin.team_departments.index') }}'">
+                        <div class="card-content-wrapper">
+                            <div class="card-icon card-team">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Team Departemen</h3>
+                                <p>Kelola struktur tim per departemen dan koordinasi</p>
+                            </div>
                         </div>
                     </div>
                 @endif
 
                 <div class="card" onclick="location.href='{{ route('admin.create-user') }}'">
-                    <div class="card-icon card-user">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3>Buat User Baru</h3>
-                        <p>Tambahkan pengguna ke sistem</p>
+                    <div class="card-content-wrapper">
+                        <div class="card-icon card-user">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Buat User Baru</h3>
+                            <p>Tambahkan pengguna baru ke dalam sistem</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card" onclick="location.href='{{ route('admin.attendances.index') }}'">
-                    <div class="card-icon card-attendance">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3>Data Attendance</h3>
-                        <p>Lihat kehadiran pegawai</p>
+                    <div class="card-content-wrapper">
+                        <div class="card-icon card-attendance">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Data Attendance</h3>
+                            <p>Lihat dan kelola data kehadiran semua pegawai</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card" onclick="location.href='{{ route('admin.leaves.index') }}'">
-                    <div class="card-icon card-leave">
-                        <i class="fas fa-calendar-minus"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3>Data Cuti</h3>
-                        <p>Kelola pengajuan cuti</p>
+                    <div class="card-content-wrapper">
+                        <div class="card-icon card-leave">
+                            <i class="fas fa-calendar-minus"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Data Cuti</h3>
+                            <p>Kelola pengajuan cuti dan permohonan izin</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -577,7 +740,7 @@
                             <th>Departemen</th>
                             <th>Team Departemen</th>
                             <th>Manager Departemen</th>
-                            <th>Aksi</th> 
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -595,7 +758,8 @@
                                 <td>{{ $u->teamDepartment->department->manager_department ?? '-' }}</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="{{ route('admin.edit-user', $u->nip) }}" class="btn btn-sm btn-warning">
+                                        <a href="{{ route('admin.edit-user', $u->nip) }}"
+                                            class="btn btn-sm btn-warning">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         <form action="{{ route('admin.delete-user', $u->nip) }}" method="POST"
@@ -661,25 +825,11 @@
             setTimeout(function() {
                 successAlert.style.opacity = '0';
                 successAlert.style.transition = 'opacity 0.5s ease';
-
                 setTimeout(function() {
                     successAlert.style.display = 'none';
                 }, 500);
             }, 5000);
         }
-
-        // Add fade-in animation for cards
-        const cards = document.querySelectorAll('.card');
-        cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100 * (index + 1));
-        });
 
         // Add click effect for buttons
         const buttons = document.querySelectorAll('.btn');
@@ -691,44 +841,31 @@
                 const size = Math.max(rect.height, rect.width);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
+
                 ripple.style.width = ripple.style.height = size + 'px';
                 ripple.style.left = x + 'px';
                 ripple.style.top = y + 'px';
                 ripple.classList.add('ripple');
-                
+
                 this.appendChild(ripple);
-                
+
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
             });
         });
+
+        // Add smooth scroll behavior for card clicks
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Add subtle click animation
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
     </script>
-
-    <style>
-        /* Ripple effect for buttons */
-        .btn {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
-        }
-
-        @keyframes ripple-animation {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-    </style>
 </body>
 
 </html>

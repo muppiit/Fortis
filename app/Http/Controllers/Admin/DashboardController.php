@@ -255,17 +255,30 @@ class DashboardController extends Controller
     //team department
     public function teamDepartmentsIndex()
     {
-        $teamDepartments = TeamDepartment::with('department')->get();
-        return view('admin.team_department.index', compact('teamDepartments'));
+        $user = Auth::user();
+        $roles = Role::all();
+
+        if ($user->role->level === 'super_super_admin') {
+            $teamDepartments = TeamDepartment::with('department')->get();
+        } elseif ($user->role->level === 'super_admin') {
+            $teamDepartments = TeamDepartment::with('department')
+                ->where('department_id', $user->teamDepartment->department_id)
+                ->get();
+        } else {
+            $teamDepartments = collect(); // kosong untuk admin/user
+        }
+
+        return view('admin.team_departement.index', compact('teamDepartments', 'roles', 'user'));
     }
 
-    public function create()
+
+    public function teamDepartmentsCreate()
     {
         $departments = Department::all();
-        return view('admin.team_department.create', compact('departments'));
+        return view('admin.team_departement.create', compact('departments'));
     }
 
-    public function store(Request $request)
+    public function teamDepartmentsStore(Request $request)
     {
         $request->validate([
             'department_id' => 'required|exists:departments,id',
@@ -277,17 +290,17 @@ class DashboardController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('admin.team_department.index')->with('success', 'Team departemen berhasil ditambahkan.');
+        return redirect()->route('admin.team_departments.index')->with('success', 'Team departemen berhasil ditambahkan.');
     }
 
-    public function edit($id)
+    public function teamDepartmentsEdit($id)
     {
         $teamDepartment = TeamDepartment::findOrFail($id);
         $departments = Department::all();
-        return view('admin.team_department.edit', compact('teamDepartment', 'departments'));
+        return view('admin.team_departement.edit', compact('teamDepartment', 'departments'));
     }
 
-    public function update(Request $request, $id)
+    public function teamDepartmentsUpdate(Request $request, $id)
     {
         $teamDepartment = TeamDepartment::findOrFail($id);
 
@@ -300,14 +313,14 @@ class DashboardController extends Controller
         $teamDepartment->name = $request->name;
         $teamDepartment->save();
 
-        return redirect()->route('admin.team_department.index')->with('success', 'Team departemen berhasil diperbarui.');
+        return redirect()->route('admin.team_departments.index')->with('success', 'Team departemen berhasil diperbarui.');
     }
 
-    public function destroy($id)
+    public function teamDepartmentsDestroy($id)
     {
         $teamDepartment = TeamDepartment::findOrFail($id);
         $teamDepartment->delete();
 
-        return redirect()->route('admin.team_department.index')->with('success', 'Team departemen berhasil dihapus.');
+        return redirect()->route('admin.team_departments.index')->with('success', 'Team departemen berhasil dihapus.');
     }
 }
