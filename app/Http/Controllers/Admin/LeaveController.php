@@ -65,7 +65,7 @@ class LeaveController extends Controller
         ]);
 
         $leave->status = $request->status;
-        $leave->approved_by = Auth::user()->nip;
+        $leave->approved_by = Auth::user()->name;
         $leave->approved_at = now();
         $leave->save();
 
