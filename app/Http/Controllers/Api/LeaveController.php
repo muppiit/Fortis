@@ -56,8 +56,35 @@ class LeaveController extends Controller
     {
         $user = Auth::user();
 
-        $leaves = Leave::where('user_nip', $user->nip)->latest()->get();
+        // Ambil leave sekaligus relasi approver
+        $leaves = Leave::with('approver')
+            ->where('user_nip', $user->nip)
+            ->latest()
+            ->get();
 
-        return response()->json($leaves);
+        // Format output
+        $result = $leaves->map(function ($leave) {
+            return [
+                'id' => $leave->id,
+                'type' => $leave->type,
+                'start_date' => $leave->start_date,
+                'end_date' => $leave->end_date,
+                'reason' => $leave->reason,
+                'proof_file' => $leave->proof_file,
+                'status' => $leave->status,
+                'approved_by' => $leave->approver ? [
+                    'nip' => $leave->approver->nip,
+                    'name' => $leave->approver->name,
+                ] : null,
+                'approved_at' => $leave->approved_at,
+                'created_at' => $leave->created_at,
+                'updated_at' => $leave->updated_at,
+            ];
+        });
+
+        return response()->json([
+            'message' => 'List pengajuan cuti Anda',
+            'data' => $result,
+        ]);
     }
 }
